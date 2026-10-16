@@ -1,79 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex">
-  <title>問卷分配中…</title>
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      background: #f5f6f8;
-      color: #1f2933;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC",
-                   "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-      text-align: center;
-    }
-    p { color: #6b7280; }
-    a {
-      display: none;
-      margin-top: 12px;
-      padding: 10px 22px;
-      border-radius: 999px;
-      background: #2f80ed;
-      color: #fff;
-      font-weight: 600;
-      text-decoration: none;
-    }
-  </style>
-</head>
-<body>
-  <main>
-    <h2>正在為您分配問卷…</h2>
-    <p>請稍候，系統將自動帶您前往問卷頁面。</p>
-    <a id="link" href="#">前往問卷</a>
-  </main>
-
-  <script>
-    // ===== 設定：換成你的三個 SurveyCake 網址 =====
-    const SURVEYS = [
-      "https://www.surveycake.com/s/AAAAA", // 問卷 A
-      "https://www.surveycake.com/s/BBBBB", // 問卷 B
-      "https://www.surveycake.com/s/CCCCC", // 問卷 C
-    ];
-    // ===========================================
-
-    const KEY = "survey-rotation-assigned";
-
-    // 均勻隨機選一個 0 ~ n-1
-    function randomIndex(n) {
-      const buf = new Uint32Array(1);
-      const limit = Math.floor(0x100000000 / n) * n;
-      do { crypto.getRandomValues(buf); } while (buf[0] >= limit);
-      return buf[0] % n;
-    }
-
-    // 同一位受試者重新整理時，維持原本分到的問卷
-    let url = null;
-    try { url = localStorage.getItem(KEY); } catch (e) {}
-    if (!SURVEYS.includes(url)) {
-      url = SURVEYS[randomIndex(SURVEYS.length)];
-      try { localStorage.setItem(KEY, url); } catch (e) {}
-    }
-
-    // 把網址上的參數（例如 Prolific 的 PROLIFIC_PID）一併帶到問卷
-    const target = new URL(url);
-    new URLSearchParams(location.search).forEach((v, k) => target.searchParams.set(k, v));
-
-    const link = document.getElementById("link");
-    link.href = target.href;
-    setTimeout(() => { link.style.display = "inline-block"; }, 1500); // 沒自動跳轉時顯示按鈕
-    location.replace(target.href);
-  </script>
+<html>
+<head><meta charset="utf-8"><title>Loading survey...</title></head>
+<body style="font-family:sans-serif;text-align:center;padding-top:80px">
+<p>Loading your survey, please wait...</p>
+<script>
+const links = [
+  "https://www.surveycake.com/s/Q4lbv",
+  "https://www.surveycake.com/s/yQngM",
+  "https://www.surveycake.com/s/MYVwD"
+];
+const q = window.location.search;
+const target = links[Math.floor(Math.random() * links.length)];
+location.replace(target + q);
+</script>
 </body>
 </html>
